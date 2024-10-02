@@ -2,9 +2,13 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/services/firebase_dervices.dart';
+import 'package:flutter_chat_app/widgets/customInputFields.dart';
+import 'package:flutter_chat_app/widgets/rounded_button.dart';
 import 'package:get_it/get_it.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   State<StatefulWidget> createState() => _RegisterPageState();
 }
@@ -88,53 +92,46 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _nameField(),
-            _emailText(),
-            _passwordField(),
+            CustomInputField(
+              onSaved: (_value) => _name = _value?.trim(),
+              regEx: '',
+              hintText: 'name...',
+              obscureText: false,
+            ),
+            CustomInputField(
+              onSaved: (_value) {
+                setState(
+                  () {
+                    _email = _value;
+                  },
+                );
+              },
+              regEx:
+                  r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
+              hintText: 'email...',
+              obscureText: false,
+            ),
+            CustomInputField(
+              onSaved: (_value) {
+                setState(
+                  () {
+                    _password = _value;
+                  },
+                );
+              },
+              regEx: r'{.8,}',
+              hintText: "password...",
+              obscureText: true,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _nameField() {
-    return TextFormField(
-      decoration: const InputDecoration(hintText: "name..."),
-      onSaved: (_value) => _name = _value?.trim(),
-      validator: (_value) =>
-          (_value?.trim().isNotEmpty ?? false) ? null : "Enter name",
-    );
-  }
-
-  Widget _emailText() {
-    return TextFormField(
-      decoration: const InputDecoration(hintText: "email..."),
-      onSaved: (_value) => _email = _value?.trim(),
-      validator: (_value) {
-        final emailRegex = RegExp(
-            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
-        return emailRegex.hasMatch(_value ?? '')
-            ? null
-            : "Please enter a valid email";
-      },
-    );
-  }
-
-  Widget _passwordField() {
-    return TextFormField(
-      decoration: const InputDecoration(hintText: "password..."),
-      onSaved: (_value) => _password = _value,
-      validator: (_value) {
-        if ((_value ?? '').isEmpty) return "Enter password";
-        return (_value!.length >= 6) ? null : "Password too short";
-      },
-      obscureText: true,
-    );
-  }
-
   Widget _titleText() {
     return const Text(
-      'social-media',
+      'Chat-App',
       style: TextStyle(
         color: Colors.black,
         fontSize: 35,
@@ -144,16 +141,11 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _registerBtn() {
-    return MaterialButton(
-      color: Colors.red,
+    return RoundedButton(
+      name: 'Login',
+      height: deviceHeight * 0.065,
+      width: deviceWidth * 0.65,
       onPressed: _registerUser,
-      child: const Text(
-        'Register',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-        ),
-      ),
     );
   }
 

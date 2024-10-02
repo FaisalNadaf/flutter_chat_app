@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/services/firebase_dervices.dart';
+import 'package:flutter_chat_app/services/navigatorServices.dart';
+import 'package:flutter_chat_app/widgets/customInputFields.dart';
+import 'package:flutter_chat_app/widgets/rounded_button.dart';
 import 'package:get_it/get_it.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,7 +17,7 @@ final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
 String? _email;
 String? _password;
 late double deviceHeight, deviceWidth;
-
+NavigatorServices _navagation = GetIt.instance.get<NavigatorServices>();
 // FireBaseService? _fireBaseService;
 
 class _loginPage extends State<LoginPage> {
@@ -29,19 +32,22 @@ class _loginPage extends State<LoginPage> {
     deviceWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.1),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              _titleText(),
-              _loginFormField(),
-              _loginBtn(),
-              _registerPageLink(),
-            ],
+      body: Center(
+        child: Container(
+          height: deviceHeight * 0.7,
+          padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.1),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                _titleText(),
+                _loginFormField(),
+                _loginBtn(),
+                _registerPageLink(),
+              ],
+            ),
           ),
         ),
       ),
@@ -52,58 +58,48 @@ class _loginPage extends State<LoginPage> {
     return Container(
       height: deviceHeight * 0.2,
       child: Form(
-          key: _loginFormKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _emailText(),
-              _passwordField(),
-            ],
-          )),
-    );
-  }
-
-  Widget _emailText() {
-    return TextFormField(
-      decoration: const InputDecoration(hintText: "email..."),
-      onSaved: (_value) {
-        setState(() {
-          _email = _value;
-        });
-      },
-      validator: (_value) {
-        bool result = _value!.contains(
-          RegExp(
-              r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"),
-        );
-        return result ? null : "please enter valid email ";
-      },
-    );
-  }
-
-  Widget _passwordField() {
-    return TextFormField(
-      decoration: const InputDecoration(hintText: "password..."),
-      onSaved: (_value) {
-        setState(() {
-          _password = _value;
-        });
-      },
-      validator: (_value) => _value!.length == 0
-          ? "enter password"
-          : _value.length >= 6
-              ? null
-              : "to short! ",
+        key: _loginFormKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CustomInputField(
+              onSaved: (_value) {
+                setState(
+                  () {
+                    _email = _value;
+                  },
+                );
+              },
+              regEx:
+                  r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
+              hintText: 'email...',
+              obscureText: false,
+            ),
+            CustomInputField(
+              onSaved: (_value) {
+                setState(
+                  () {
+                    _password = _value;
+                  },
+                );
+              },
+              regEx: r'{.8,}',
+              hintText: "password...",
+              obscureText: true,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _titleText() {
     return const Text(
-      'social-media',
+      'Chat-App',
       style: TextStyle(
-        color: Colors.black,
+        color: Colors.white,
         fontSize: 35,
         fontWeight: FontWeight.w700,
       ),
@@ -111,24 +107,19 @@ class _loginPage extends State<LoginPage> {
   }
 
   Widget _loginBtn() {
-    return MaterialButton(
-      color: Colors.red,
+    return RoundedButton(
+      name: 'Login',
+      height: deviceHeight * 0.065,
+      width: deviceWidth * 0.65,
       onPressed: _loginUser,
-      child: const Text(
-        'Login',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-        ),
-      ),
     );
   }
 
   Widget _registerPageLink() {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, 'register'),
+      onTap: () => _navagation.navigateToRoute('register'),
       child: const Text(
-        'dont have an account?',
+        'don\'t have an account ?',
         style: TextStyle(
           color: Colors.blue,
         ),

@@ -4,16 +4,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/services/navigatorServices.dart';
+import 'package:get_it/get_it.dart';
 import 'package:path/path.dart' as p;
 
 final String User_Collection = 'Users';
-final String Posts_Collection = 'pasts';
+const String CHAT_COLLECTION = "Chats";
+const String MESSAGE_COLLECTION = "Messages";
+late NavigatorServices _navagation;
 
-class FireBaseService {
+class FireBaseService extends ChangeNotifier{
+
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
   FirebaseFirestore _db = FirebaseFirestore.instance;
-  FireBaseService();
+
+  FireBaseService() {
+    _navagation = GetIt.instance.get<NavigatorServices>();
+  }
 
   Map? currentUser;
 
@@ -24,6 +33,7 @@ class FireBaseService {
     required File image,
   }) async {
     try {
+      
       UserCredential _userInfo = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 

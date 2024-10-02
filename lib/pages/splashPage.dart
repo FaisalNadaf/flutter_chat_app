@@ -20,7 +20,7 @@ class _SplashpageState extends State<Splashpage> {
   void initState() {
     super.initState();
     Future.delayed(
-      Duration(seconds: 3),
+      Duration(seconds: 2),
     ).then(
       (_) => _setUpInitilation().then(
         (_) => widget.appInitilation(),
