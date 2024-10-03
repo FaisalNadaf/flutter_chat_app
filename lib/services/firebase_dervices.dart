@@ -16,9 +16,9 @@ late NavigatorServices _navagation;
 
 class FireBaseService extends ChangeNotifier{
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseStorage _storage = FirebaseStorage.instance;
-  FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   FireBaseService() {
     _navagation = GetIt.instance.get<NavigatorServices>();
@@ -34,21 +34,21 @@ class FireBaseService extends ChangeNotifier{
   }) async {
     try {
       
-      UserCredential _userInfo = await _auth.createUserWithEmailAndPassword(
+      UserCredential userInfo = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      String _userId = _userInfo.user!.uid;
-      String _fileName = Timestamp.now().millisecondsSinceEpoch.toString() +
+      String userId = userInfo.user!.uid;
+      String fileName = Timestamp.now().millisecondsSinceEpoch.toString() +
           p.extension(image.path);
-      print(_fileName);
-      UploadTask _task =
-          _storage.ref('images/$_userId/$_fileName').putFile(image);
-      return _task.then((_snapShot) async {
-        String _downloadUrl = await _snapShot.ref.getDownloadURL();
-        await _db.collection(User_Collection).doc(_userId).set({
+      print(fileName);
+      UploadTask task =
+          _storage.ref('images/$userId/$fileName').putFile(image);
+      return task.then((snapShot) async {
+        String downloadUrl = await snapShot.ref.getDownloadURL();
+        await _db.collection(User_Collection).doc(userId).set({
           "name": name,
           "email": email,
-          "image": _downloadUrl,
+          "image": downloadUrl,
         });
         return true;
       });
@@ -104,11 +104,11 @@ class FireBaseService extends ChangeNotifier{
     required String password,
   }) async {
     try {
-      UserCredential _userInfo = await _auth.signInWithEmailAndPassword(
+      UserCredential userInfo = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      if (_userInfo != null) {
+      if (userInfo != null) {
         // currentUser = await getUserData(uid: _userInfo.user!.uid);
         return true;
       } else {

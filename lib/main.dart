@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<FireBaseService>(
-          create: (BuildContext _context) {
+          create: (BuildContext context) {
             return FireBaseService();
           },
         )
@@ -47,8 +47,8 @@ class MyApp extends StatelessWidget {
         navigatorKey: NavigatorServices.navigatorKey,
         initialRoute: 'login',
         routes: {
-          'login': (BuildContext _cotext) => LoginPage(),
-          'register': (BuildContext _context) => RegisterPage(),
+          'login': (BuildContext cotext) => LoginPage(),
+          'register': (BuildContext context) => RegisterPage(),
         },
       ),
     );

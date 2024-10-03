@@ -83,7 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _registerFormField() {
-    return Container(
+    return SizedBox(
       height: deviceHeight * 0.3,
       child: Form(
         key: _registerFormKey,
@@ -93,16 +93,16 @@ class _RegisterPageState extends State<RegisterPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomInputField(
-              onSaved: (_value) => _name = _value?.trim(),
+              onSaved: (value) => _name = value.trim(),
               regEx: '',
               hintText: 'name...',
               obscureText: false,
             ),
             CustomInputField(
-              onSaved: (_value) {
+              onSaved: (value) {
                 setState(
                   () {
-                    _email = _value;
+                    _email = value;
                   },
                 );
               },
@@ -112,10 +112,10 @@ class _RegisterPageState extends State<RegisterPage> {
               obscureText: false,
             ),
             CustomInputField(
-              onSaved: (_value) {
+              onSaved: (value) {
                 setState(
                   () {
-                    _password = _value;
+                    _password = value;
                   },
                 );
               },
@@ -152,15 +152,15 @@ class _RegisterPageState extends State<RegisterPage> {
   void _registerUser() async {
     if (_registerFormKey.currentState!.validate() && _image != null) {
       _registerFormKey.currentState!.save();
-      bool _result = await _fireBaseService!.registerUser(
+      bool result = await _fireBaseService!.registerUser(
         name: _name!,
         email: _email!,
         password: _password!,
         image: _image!,
       );
-      print(_result);
+      print(result);
       print('Registered');
-      if (_result) {
+      if (result) {
         Navigator.popAndPushNamed(context, 'home');
       }
     }

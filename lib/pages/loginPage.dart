@@ -6,6 +6,8 @@ import 'package:flutter_chat_app/widgets/rounded_button.dart';
 import 'package:get_it/get_it.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _loginPage();
@@ -27,6 +29,7 @@ class _loginPage extends State<LoginPage> {
     // _fireBaseService = GetIt.instance.get<FireBaseService>();
   }
 
+  @override
   Widget build(BuildContext context) {
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
@@ -55,7 +58,7 @@ class _loginPage extends State<LoginPage> {
   }
 
   Widget _loginFormField() {
-    return Container(
+    return SizedBox(
       height: deviceHeight * 0.2,
       child: Form(
         key: _loginFormKey,
@@ -65,10 +68,10 @@ class _loginPage extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomInputField(
-              onSaved: (_value) {
+              onSaved: (value) {
                 setState(
                   () {
-                    _email = _value;
+                    _email = value;
                   },
                 );
               },
@@ -78,10 +81,10 @@ class _loginPage extends State<LoginPage> {
               obscureText: false,
             ),
             CustomInputField(
-              onSaved: (_value) {
+              onSaved: (value) {
                 setState(
                   () {
-                    _password = _value;
+                    _password = value;
                   },
                 );
               },

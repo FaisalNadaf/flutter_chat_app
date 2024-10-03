@@ -6,8 +6,8 @@ class CustomInputField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
 
-  CustomInputField(
-      {required this.onSaved,
+  const CustomInputField(
+      {super.key, required this.onSaved,
       required this.regEx,
       required this.hintText,
       required this.obscureText});
@@ -15,13 +15,13 @@ class CustomInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onSaved: (_value) => onSaved(_value!),
+      onSaved: (value) => onSaved(value!),
       cursorColor: Colors.white,
       style: TextStyle(color: Colors.white),
       obscureText: obscureText,
       
-      validator: (_value) {
-        return RegExp(regEx).hasMatch(_value!) ? null : 'Enter a valid value.';
+      validator: (value) {
+        return RegExp(regEx).hasMatch(value!) ? null : 'Enter a valid value.';
       },
       decoration: InputDecoration(
         fillColor: Color.fromRGBO(30, 29, 37, 1.0),
@@ -45,7 +45,7 @@ class CustomTextField extends StatelessWidget {
   IconData? icon;
 
   CustomTextField(
-      {required this.onEditingComplete,
+      {super.key, required this.onEditingComplete,
       required this.hintText,
       required this.obscureText,
       required this.controller,
