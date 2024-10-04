@@ -19,7 +19,7 @@ class Chat {
     required this.activity,
     required this.group,
   }) {
-    _recepients = members.where((_i) => _i.uid != currentUserUid).toList();
+    _recepients = members.where((i) => i.uid != currentUserUid).toList();
   }
 
   List<ChatUser> recepients() {
@@ -29,7 +29,7 @@ class Chat {
   String title() {
     return !group
         ? _recepients.first.name
-        : _recepients.map((_user) => _user.name).join(", ");
+        : _recepients.map((user) => user.name).join(", ");
   }
 
   String imageURL() {

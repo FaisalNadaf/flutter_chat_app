@@ -1,54 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_app/pages/loginPage.dart';
-import 'package:flutter_chat_app/pages/registerPage.dart';
-import 'package:flutter_chat_app/pages/splashPage.dart';
-import 'package:flutter_chat_app/services/firebase_dervices.dart';
-import 'package:flutter_chat_app/services/navigatorServices.dart';
+
+//Packages
 import 'package:provider/provider.dart';
+
+//Services
+import './services/navigation_service.dart';
+
+//Providers
+import './providers/authentication_provider.dart';
+
+//Pages
+import './pages/splash_page.dart';
+import './pages/login_page.dart';
+import './pages/register_page.dart';
+import './pages/home_page.dart';
 
 void main() {
   runApp(
-    Splashpage(
+    SplashPage(
       key: UniqueKey(),
-      appInitilation: () {
+      onInitializationComplete: () {
         runApp(
-          MyApp(),
+          MainApp(),
         );
       },
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<FireBaseService>(
+        ChangeNotifierProvider<AuthenticationProvider>(
           create: (BuildContext context) {
-            return FireBaseService();
+            return AuthenticationProvider();
           },
         )
       ],
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'chat_app',
+        title: 'Chatify',
         theme: ThemeData(
-          scaffoldBackgroundColor: Color.fromRGBO(36, 35, 49, 1),
+          scaffoldBackgroundColor: Color.fromRGBO(36, 35, 49, 1.0),
           bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            backgroundColor: Color.fromRGBO(30, 29, 37, 1),
+            backgroundColor: Color.fromRGBO(30, 29, 37, 1.0),
           ),
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Color.fromRGBO(36, 35, 49, 1),
-          ),
-          useMaterial3: true,
         ),
-        navigatorKey: NavigatorServices.navigatorKey,
-        initialRoute: 'login',
+        navigatorKey: NavigationService.navigatorKey,
+        initialRoute: '/login',
         routes: {
-          'login': (BuildContext cotext) => LoginPage(),
-          'register': (BuildContext context) => RegisterPage(),
+          '/login': (BuildContext context) => LoginPage(),
+          '/register': (BuildContext context) => RegisterPage(),
+          '/home': (BuildContext context) => HomePage(),
         },
       ),
     );

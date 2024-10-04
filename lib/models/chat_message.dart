@@ -18,41 +18,41 @@ class ChatMessage {
       required this.senderID,
       required this.sentTime});
 
-  factory ChatMessage.fromJSON(Map<String, dynamic> _json) {
-    MessageType _messageType;
-    switch (_json["type"]) {
+  factory ChatMessage.fromJSON(Map<String, dynamic> json) {
+    MessageType messageType;
+    switch (json["type"]) {
       case "text":
-        _messageType = MessageType.TEXT;
+        messageType = MessageType.TEXT;
         break;
       case "image":
-        _messageType = MessageType.IMAGE;
+        messageType = MessageType.IMAGE;
         break;
       default:
-        _messageType = MessageType.UNKNOWN;
+        messageType = MessageType.UNKNOWN;
     }
     return ChatMessage(
-      content: _json["content"],
-      type: _messageType,
-      senderID: _json["sender_id"],
-      sentTime: _json["sent_time"].toDate(),
+      content: json["content"],
+      type: messageType,
+      senderID: json["sender_id"],
+      sentTime: json["sent_time"].toDate(),
     );
   }
 
   Map<String, dynamic> toJson() {
-    String _messageType;
+    String messageType;
     switch (type) {
       case MessageType.TEXT:
-        _messageType = "text";
+        messageType = "text";
         break;
       case MessageType.IMAGE:
-        _messageType = "image";
+        messageType = "image";
         break;
       default:
-        _messageType = "";
+        messageType = "";
     }
     return {
       "content": content,
-      "type": _messageType,
+      "type": messageType,
       "sender_id": senderID,
       "sent_time": Timestamp.fromDate(sentTime),
     };
