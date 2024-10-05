@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CustomInputField extends StatelessWidget {
+class CustomTextFormField extends StatelessWidget {
   final Function(String) onSaved;
   final String regEx;
   final String hintText;
   final bool obscureText;
 
-  const CustomInputField(
-      {super.key, required this.onSaved,
+  CustomTextFormField(
+      {required this.onSaved,
       required this.regEx,
       required this.hintText,
       required this.obscureText});
@@ -15,13 +15,12 @@ class CustomInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onSaved: (value) => onSaved(value!),
+      onSaved: (_value) => onSaved(_value!),
       cursorColor: Colors.white,
       style: TextStyle(color: Colors.white),
       obscureText: obscureText,
-      
-      validator: (value) {
-        return RegExp(regEx).hasMatch(value!) ? null : 'Enter a valid value.';
+      validator: (_value) {
+        return RegExp(regEx).hasMatch(_value!) ? null : 'Enter a valid value.';
       },
       decoration: InputDecoration(
         fillColor: Color.fromRGBO(30, 29, 37, 1.0),
@@ -45,7 +44,7 @@ class CustomTextField extends StatelessWidget {
   IconData? icon;
 
   CustomTextField(
-      {super.key, required this.onEditingComplete,
+      {required this.onEditingComplete,
       required this.hintText,
       required this.obscureText,
       required this.controller,

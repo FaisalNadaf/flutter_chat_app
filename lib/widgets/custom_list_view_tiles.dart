@@ -7,6 +7,8 @@ import '../widgets/rounded_image.dart';
 import '../widgets/message_bubbles.dart';
 
 //Models
+import '../models/chat_message.dart';
+import '../models/chat_user.dart';
 
 class CustomListViewTile extends StatelessWidget {
   final double height;
@@ -17,7 +19,7 @@ class CustomListViewTile extends StatelessWidget {
   final bool isSelected;
   final Function onTap;
 
-  const CustomListViewTile({super.key, 
+  CustomListViewTile({
     required this.height,
     required this.title,
     required this.subtitle,
@@ -68,7 +70,7 @@ class CustomListViewTileWithActivity extends StatelessWidget {
   final bool isActivity;
   final Function onTap;
 
-  const CustomListViewTileWithActivity({super.key, 
+  CustomListViewTileWithActivity({
     required this.height,
     required this.title,
     required this.subtitle,
@@ -124,15 +126,15 @@ class CustomChatListViewTile extends StatelessWidget {
   final double width;
   final double deviceHeight;
   final bool isOwnMessage;
-  // final ChatMessage message;
-  // final ChatUser sender;
+  final ChatMessage message;
+  final ChatUser sender;
 
-  const CustomChatListViewTile({super.key, 
+  CustomChatListViewTile({
     required this.width,
     required this.deviceHeight,
     required this.isOwnMessage,
-    // required this.message,
-    // required this.sender,
+    required this.message,
+    required this.sender,
   });
 
   @override
@@ -145,30 +147,30 @@ class CustomChatListViewTile extends StatelessWidget {
         mainAxisAlignment:
             isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
-        // children: [
-          // !isOwnMessage
-          //     ? RoundedImageNetwork(
-          //         key: UniqueKey(),
-          //         imagePath: sender.imageURL,
-          //         size: width * 0.08)
-          //     : Container(),
-          // SizedBox(
-          //   width: width * 0.05,
-          // ),
-          // message.type == MessageType.TEXT
-          //     ? TextMessageBubble(
-          //         isOwnMessage: isOwnMessage,
-          //         message: message,
-          //         height: deviceHeight * 0.06,
-          //         width: width,
-          //       )
-          //     : ImageMessageBubble(
-          //         isOwnMessage: isOwnMessage,
-          //         message: message,
-          //         height: deviceHeight * 0.30,
-          //         width: width * 0.55,
-          //       ),
-        // ],
+        children: [
+          !isOwnMessage
+              ? RoundedImageNetwork(
+                  key: UniqueKey(),
+                  imagePath: sender.imageURL,
+                  size: width * 0.08)
+              : Container(),
+          SizedBox(
+            width: width * 0.05,
+          ),
+          message.type == MessageType.TEXT
+              ? TextMessageBubble(
+                  isOwnMessage: isOwnMessage,
+                  message: message,
+                  height: deviceHeight * 0.06,
+                  width: width,
+                )
+              : ImageMessageBubble(
+                  isOwnMessage: isOwnMessage,
+                  message: message,
+                  height: deviceHeight * 0.30,
+                  width: width * 0.55,
+                ),
+        ],
       ),
     );
   }

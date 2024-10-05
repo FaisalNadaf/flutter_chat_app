@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -5,7 +7,7 @@ class RoundedImageNetwork extends StatelessWidget {
   final String imagePath;
   final double size;
 
-  const RoundedImageNetwork({
+  RoundedImageNetwork({
     required Key key,
     required this.imagePath,
     required this.size,
@@ -35,7 +37,7 @@ class RoundedImageFile extends StatelessWidget {
   final double size;
 
   const RoundedImageFile({
-    required Key key,
+    Key? key,
     required this.image,
     required this.size,
   }) : super(key: key);
@@ -43,29 +45,31 @@ class RoundedImageFile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: size,
-      // height: size,
-      // decoration: BoxDecoration(
-      //   image: DecorationImage(
-      //     fit: BoxFit.cover,
-      //     image: AssetImage(image.path),
-      //   ),
-      //   borderRadius: BorderRadius.all(Radius.circular(size)),
-      //   color: Colors.black,
-      // ),
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: FileImage(File(image.path!)), // Use FileImage to load image from file path
+        ),
+        borderRadius: BorderRadius.all(Radius.circular(size)),
+        color: Colors.black,
+      ),
     );
   }
 }
+
+
 
 class RoundedImageNetworkWithStatusIndicator extends RoundedImageNetwork {
   final bool isActive;
 
   RoundedImageNetworkWithStatusIndicator({
-    required super.key,
-    required super.imagePath,
-    required super.size,
+    required Key key,
+    required String imagePath,
+    required double size,
     required this.isActive,
-  });
+  }) : super(key: key, imagePath: imagePath, size: size);
 
   @override
   Widget build(BuildContext context) {
