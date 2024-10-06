@@ -19,7 +19,7 @@ class CustomListViewTile extends StatelessWidget {
   final bool isSelected;
   final Function onTap;
 
-  CustomListViewTile({
+  const CustomListViewTile({super.key, 
     required this.height,
     required this.title,
     required this.subtitle,
@@ -70,7 +70,7 @@ class CustomListViewTileWithActivity extends StatelessWidget {
   final bool isActivity;
   final Function onTap;
 
-  CustomListViewTileWithActivity({
+  const CustomListViewTileWithActivity({super.key, 
     required this.height,
     required this.title,
     required this.subtitle,
@@ -129,7 +129,7 @@ class CustomChatListViewTile extends StatelessWidget {
   final ChatMessage message;
   final ChatUser sender;
 
-  CustomChatListViewTile({
+  const CustomChatListViewTile({super.key, 
     required this.width,
     required this.deviceHeight,
     required this.isOwnMessage,
