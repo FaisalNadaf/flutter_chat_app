@@ -18,7 +18,7 @@ import '../models/chat.dart';
 import '../pages/chat_page.dart';
 
 class UsersPageProvider extends ChangeNotifier {
-  AuthenticationProvider _auth;
+  final AuthenticationProvider _auth;
 
   late DatabaseService _database;
   late NavigationService _navigation;
@@ -37,21 +37,17 @@ class UsersPageProvider extends ChangeNotifier {
     getUsers();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   void getUsers({String? name}) async {
     _selectedUsers = [];
     try {
       _database.getUsers(name: name).then(
-        (_snapshot) {
-          users = _snapshot.docs.map(
-            (_doc) {
-              Map<String, dynamic> _data = _doc.data() as Map<String, dynamic>;
-              _data["uid"] = _doc.id;
-              return ChatUser.fromJSON(_data);
+        (snapshot) {
+          users = snapshot.docs.map(
+            (doc) {
+              Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+              data["uid"] = doc.id;
+              return ChatUser.fromJSON(data);
             },
           ).toList();
           notifyListeners();
@@ -63,11 +59,11 @@ class UsersPageProvider extends ChangeNotifier {
     }
   }
 
-  void updateSelectedUsers(ChatUser _user) {
-    if (_selectedUsers.contains(_user)) {
-      _selectedUsers.remove(_user);
+  void updateSelectedUsers(ChatUser user) {
+    if (_selectedUsers.contains(user)) {
+      _selectedUsers.remove(user);
     } else {
-      _selectedUsers.add(_user);
+      _selectedUsers.add(user);
     }
     notifyListeners();
   }
@@ -75,42 +71,42 @@ class UsersPageProvider extends ChangeNotifier {
   void createChat() async {
     try {
       //Create Chat
-      List<String> _membersIds =
-          _selectedUsers.map((_user) => _user.uid).toList();
-      _membersIds.add(_auth.user.uid);
-      bool _isGroup = _selectedUsers.length > 1;
-      DocumentReference? _doc = await _database.createChat(
+      List<String> membersIds =
+          _selectedUsers.map((user) => user.uid).toList();
+      membersIds.add(_auth.user.uid);
+      bool isGroup = _selectedUsers.length > 1;
+      DocumentReference? doc = await _database.createChat(
         {
-          "is_group": _isGroup,
+          "is_group": isGroup,
           "is_activity": false,
-          "members": _membersIds,
+          "members": membersIds,
         },
       );
       //Navigate To Chat Page
-      List<ChatUser> _members = [];
-      for (var _uid in _membersIds) {
-        DocumentSnapshot _userSnapshot = await _database.getUser(_uid);
-        Map<String, dynamic> _userData =
-            _userSnapshot.data() as Map<String, dynamic>;
-        _userData["uid"] = _userSnapshot.id;
-        _members.add(
+      List<ChatUser> members = [];
+      for (var _uid in membersIds) {
+        DocumentSnapshot userSnapshot = await _database.getUser(_uid);
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+        userData["uid"] = userSnapshot.id;
+        members.add(
           ChatUser.fromJSON(
-            _userData,
+            userData,
           ),
         );
       }
-      ChatPage _chatPage = ChatPage(
+      ChatPage chatPage = ChatPage(
         chat: Chat(
-            uid: _doc!.id,
+            uid: doc!.id,
             currentUserUid: _auth.user.uid,
-            members: _members,
+            members: members,
             messages: [],
             activity: false,
-            group: _isGroup),
+            group: isGroup),
       );
       _selectedUsers = [];
       notifyListeners();
-      _navigation.navigateToPage(_chatPage);
+      _navigation.navigateToPage(chatPage);
     } catch (e) {
       print("Error creating chat.");
       print(e);
