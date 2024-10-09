@@ -1,3 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/services/database_service.dart';
+import 'package:flutter_chat_app/services/navigation_service.dart';
+import 'package:get_it/get_it.dart';
 
 import '../models/chat_user.dart';
 
@@ -20,6 +25,7 @@ class AuthenticationProvider extends ChangeNotifier {
           (_snapshot) {
             Map<String, dynamic> _userData =
                 _snapshot.data()! as Map<String, dynamic>;
+            print('chatUSer in auth controler ::: $_userData');
             user = ChatUser.fromJSON(
               {
                 "uid": _user.uid,
@@ -40,11 +46,9 @@ class AuthenticationProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> loginUsingEmailAndPassword(
-      String _email, String _password) async {
+  Future<void> loginUsingEmailAndPassword(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(
-          email: _email, password: _password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException {
       print("Error logging user into Firebase");
     } catch (e) {
@@ -53,16 +57,17 @@ class AuthenticationProvider extends ChangeNotifier {
   }
 
   Future<String?> registerUserUsingEmailAndPassword(
-      String _email, String _password) async {
+      String email, String password) async {
     try {
-      UserCredential _credentials = await _auth.createUserWithEmailAndPassword(
-          email: _email, password: _password);
-      return _credentials.user!.uid;
+      UserCredential credentials = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return credentials.user!.uid;
     } on FirebaseAuthException {
       print("Error registering user.");
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   Future<void> logout() async {

@@ -24,10 +24,10 @@ class ChatPageProvider extends ChangeNotifier {
   late MediaService _media;
   late NavigationService _navigation;
 
-  AuthenticationProvider _auth;
-  ScrollController _messagesListViewController;
+  final AuthenticationProvider _auth;
+  final ScrollController _messagesListViewController;
 
-  String _chatId;
+  final String _chatId;
   List<ChatMessage>? messages;
 
   late StreamSubscription _messagesStream;
@@ -40,8 +40,8 @@ class ChatPageProvider extends ChangeNotifier {
     return message;
   }
 
-  void set message(String _value) {
-    _message = _value;
+  set message(String value) {
+    _message = value;
   }
 
   ChatPageProvider(this._chatId, this._auth, this._messagesListViewController) {
@@ -63,17 +63,17 @@ class ChatPageProvider extends ChangeNotifier {
   void listenToMessages() {
     try {
       _messagesStream = _db.streamMessagesForChat(_chatId).listen(
-        (_snapshot) {
-          List<ChatMessage> _messages = _snapshot.docs.map(
-            (_m) {
-              Map<String, dynamic> _messageData =
-                  _m.data() as Map<String, dynamic>;
-              return ChatMessage.fromJSON(_messageData);
+        (snapshot) {
+          List<ChatMessage> messages = snapshot.docs.map(
+            (m) {
+              Map<String, dynamic> messageData =
+                  m.data() as Map<String, dynamic>;
+              return ChatMessage.fromJSON(messageData);
             },
           ).toList();
-          messages = _messages;
+          messages = messages;
           notifyListeners();
-          WidgetsBinding.instance!.addPostFrameCallback(
+          WidgetsBinding.instance.addPostFrameCallback(
             (_) {
               if (_messagesListViewController.hasClients) {
                 _messagesListViewController.jumpTo(
@@ -91,37 +91,37 @@ class ChatPageProvider extends ChangeNotifier {
 
   void listenToKeyboardChanges() {
     _keyboardVisibilityStream = _keyboardVisibilityController.onChange.listen(
-      (_event) {
-        _db.updateChatData(_chatId, {"is_activity": _event});
+      (event) {
+        _db.updateChatData(_chatId, {"is_activity": event});
       },
     );
   }
 
   void sendTextMessage() {
     if (_message != null) {
-      ChatMessage _messageToSend = ChatMessage(
+      ChatMessage messageToSend = ChatMessage(
         content: _message!,
         type: MessageType.TEXT,
         senderID: _auth.user.uid,
         sentTime: DateTime.now(),
       );
-      _db.addMessageToChat(_chatId, _messageToSend);
+      _db.addMessageToChat(_chatId, messageToSend);
     }
   }
 
   void sendImageMessage() async {
     try {
-      PlatformFile? _file = await _media.pickImageFromLibrary();
-      if (_file != null) {
-        String? _downloadURL = await _storage.saveChatImageToStorage(
-            _chatId, _auth.user.uid, _file);
-        ChatMessage _messageToSend = ChatMessage(
-          content: _downloadURL!,
+      PlatformFile? file = await _media.pickImageFromLibrary();
+      if (file != null) {
+        String? downloadURL = await _storage.saveChatImageToStorage(
+            _chatId, _auth.user.uid, file);
+        ChatMessage messageToSend = ChatMessage(
+          content: downloadURL!,
           type: MessageType.IMAGE,
           senderID: _auth.user.uid,
           sentTime: DateTime.now(),
         );
-        _db.addMessageToChat(_chatId, _messageToSend);
+        _db.addMessageToChat(_chatId, messageToSend);
       }
     } catch (e) {
       print("Error sending image message.");

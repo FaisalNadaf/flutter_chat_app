@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
+import 'dart:developer' as developer;
 
 //Services
 import '../services/database_service.dart';
@@ -37,7 +38,6 @@ class UsersPageProvider extends ChangeNotifier {
     getUsers();
   }
 
-
   void getUsers({String? name}) async {
     _selectedUsers = [];
     try {
@@ -47,6 +47,9 @@ class UsersPageProvider extends ChangeNotifier {
             (doc) {
               Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
               data["uid"] = doc.id;
+              developer.log(
+                "\x1B[32m data in user page provider ::: $data \x1B[0m",
+              );
               return ChatUser.fromJSON(data);
             },
           ).toList();
@@ -71,8 +74,7 @@ class UsersPageProvider extends ChangeNotifier {
   void createChat() async {
     try {
       //Create Chat
-      List<String> membersIds =
-          _selectedUsers.map((user) => user.uid).toList();
+      List<String> membersIds = _selectedUsers.map((user) => user.uid).toList();
       membersIds.add(_auth.user.uid);
       bool isGroup = _selectedUsers.length > 1;
       DocumentReference? doc = await _database.createChat(
