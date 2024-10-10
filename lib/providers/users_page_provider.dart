@@ -39,6 +39,7 @@ class UsersPageProvider extends ChangeNotifier {
   }
 
   void getUsers({String? name}) async {
+    print(name);
     _selectedUsers = [];
     try {
       _database.getUsers(name: name).then(
@@ -47,9 +48,9 @@ class UsersPageProvider extends ChangeNotifier {
             (doc) {
               Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
               data["uid"] = doc.id;
-              developer.log(
-                "\x1B[32m data in user page provider ::: $data \x1B[0m",
-              );
+              // developer.log(
+              //   "\x1B[32m data in user_page_provider.dart ::: $data \x1B[0m",
+              // );
               return ChatUser.fromJSON(data);
             },
           ).toList();
