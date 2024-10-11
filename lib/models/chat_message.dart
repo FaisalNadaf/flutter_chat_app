@@ -12,11 +12,12 @@ class ChatMessage {
   final String content;
   final DateTime sentTime;
 
-  ChatMessage(
-      {required this.content,
-      required this.type,
-      required this.senderID,
-      required this.sentTime});
+  ChatMessage({
+    required this.content,
+    required this.type,
+    required this.senderID,
+    required this.sentTime, 
+  });
 
   factory ChatMessage.fromJSON(Map<String, dynamic> json) {
     MessageType messageType;

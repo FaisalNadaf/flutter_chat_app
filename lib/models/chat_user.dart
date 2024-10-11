@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 class ChatUser {
   final String uid;
   final String name;
@@ -14,6 +16,7 @@ class ChatUser {
   });
 
   factory ChatUser.fromJSON(Map<String, dynamic> json) {
+    // developer.log("\x1B[32m json data from chat_user.dart: $json \x1B[0m");
     return ChatUser(
       uid: json["uid"],
       name: json["name"],
@@ -37,6 +40,6 @@ class ChatUser {
   }
 
   bool wasRecentlyActive() {
-    return DateTime.now().difference(lastActive).inHours < 2;
+    return DateTime.now().difference(lastActive).inMinutes < 5;
   }
 }
