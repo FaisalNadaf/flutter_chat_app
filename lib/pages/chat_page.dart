@@ -1,7 +1,7 @@
 //Packages
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:developer' as developer;
 //Widgets
 import '../widgets/top_bar.dart';
 import '../widgets/custom_list_view_tiles.dart';
@@ -79,7 +79,7 @@ class _ChatPageState extends State<ChatPage> {
                 children: [
                   TopBar(
                     widget.chat.title(),
-                    fontSize: 10,
+                    fontSize: 15,
                     primaryAction: IconButton(
                       icon: Icon(
                         Icons.delete,
@@ -99,6 +99,10 @@ class _ChatPageState extends State<ChatPage> {
                       },
                     ),
                   ),
+                  // Text(
+                  //   'data',
+                  //   style: TextStyle(fontSize: 40, color: Colors.white),
+                  // ),
                   _messagesListView(),
                   _sendMessageForm(),
                 ],
@@ -111,8 +115,14 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _messagesListView() {
+    developer.log(
+      "\x1B[32m chat_page.dart line 119  ${_pageProvider.messages} \x1B[0m",
+    );
     if (_pageProvider.messages != null) {
       if (_pageProvider.messages!.isNotEmpty) {
+        developer.log(
+          "\x1B[32m message in chat_page.dart ${_pageProvider.message} \x1B[0m",
+        );
         return SizedBox(
           height: _deviceHeight * 0.74,
           child: ListView.builder(
@@ -127,9 +137,7 @@ class _ChatPageState extends State<ChatPage> {
                   width: _deviceWidth * 0.80,
                   message: message,
                   isOwnMessage: isOwnMessage,
-                  sender: widget
-                      .chat
-                      .members
+                  sender: widget.chat.members
                       .where((m) => m.uid == message.senderID)
                       .first,
                 ),
@@ -138,6 +146,9 @@ class _ChatPageState extends State<ChatPage> {
           ),
         );
       } else {
+        developer.log(
+          "\x1B[32m no chats from chat page.dart\x1B[0m",
+        );
         return Align(
           alignment: Alignment.center,
           child: Text(
@@ -147,6 +158,9 @@ class _ChatPageState extends State<ChatPage> {
         );
       }
     } else {
+      developer.log(
+        "\x1B[32m null chats from chat_page.dart \x1B[0m",
+      );
       return Center(
         child: CircularProgressIndicator(
           color: Colors.white,
@@ -184,7 +198,7 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _messageTextField() {
     return SizedBox(
-      width: _deviceWidth * 0.65,
+      width: _deviceWidth * 0.6,
       child: CustomTextFormField(
           onSaved: (value) {
             _pageProvider.message = value;
@@ -196,7 +210,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _sendMessageButton() {
-    double size = _deviceHeight * 0.04;
+    double size = _deviceHeight * 0.06;
     return SizedBox(
       height: size,
       width: size,

@@ -40,6 +40,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Chatify',
       theme: ThemeData(
         scaffoldBackgroundColor: Color.fromRGBO(36, 35, 49, 1.0),

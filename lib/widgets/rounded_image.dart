@@ -26,7 +26,7 @@ class RoundedImageNetwork extends StatelessWidget {
         borderRadius: BorderRadius.all(
           Radius.circular(size),
         ),
-        color: Colors.black,
+        color: Colors.white,
       ),
     );
   }
@@ -50,7 +50,8 @@ class RoundedImageFile extends StatelessWidget {
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: FileImage(File(image.path!)), // Use FileImage to load image from file path
+          image: FileImage(
+              File(image.path!)), // Use FileImage to load image from file path
         ),
         borderRadius: BorderRadius.all(Radius.circular(size)),
         color: Colors.black,
@@ -58,8 +59,6 @@ class RoundedImageFile extends StatelessWidget {
     );
   }
 }
-
-
 
 class RoundedImageNetworkWithStatusIndicator extends RoundedImageNetwork {
   final bool isActive;

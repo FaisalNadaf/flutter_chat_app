@@ -19,7 +19,8 @@ class CustomListViewTile extends StatelessWidget {
   final bool isSelected;
   final Function onTap;
 
-  const CustomListViewTile({super.key, 
+  const CustomListViewTile({
+    super.key,
     required this.height,
     required this.title,
     required this.subtitle,
@@ -70,7 +71,8 @@ class CustomListViewTileWithActivity extends StatelessWidget {
   final bool isActivity;
   final Function onTap;
 
-  const CustomListViewTileWithActivity({super.key, 
+  const CustomListViewTileWithActivity({
+    super.key,
     required this.height,
     required this.title,
     required this.subtitle,
@@ -129,7 +131,8 @@ class CustomChatListViewTile extends StatelessWidget {
   final ChatMessage message;
   final ChatUser sender;
 
-  const CustomChatListViewTile({super.key, 
+  const CustomChatListViewTile({
+    super.key,
     required this.width,
     required this.deviceHeight,
     required this.isOwnMessage,
@@ -161,7 +164,7 @@ class CustomChatListViewTile extends StatelessWidget {
               ? TextMessageBubble(
                   isOwnMessage: isOwnMessage,
                   message: message,
-                  height: deviceHeight * 0.06,
+                  height: deviceHeight * 0.062,
                   width: width,
                 )
               : ImageMessageBubble(
